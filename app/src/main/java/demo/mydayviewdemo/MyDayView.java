@@ -3370,7 +3370,7 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
                 // draw today circle backgroud
                 int circleY = DAY_HEADER_HEIGHT/2;
                 int circleX = computeDayLeftPosition(day) +(mCellWidth + DAY_GAP)/2;
-                p.setColor(getResources().getColor(R.color.light_blue));
+                p.setColor(getResources().getColor(R.color.today_circle_background_color));
                 canvas.drawCircle(circleX,circleY,DAY_HEADER_HEIGHT/2,p);
             }
             p.setTypeface(todayIndex == day ? mBold : Typeface.DEFAULT);
