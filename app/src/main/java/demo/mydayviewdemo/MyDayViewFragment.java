@@ -3,6 +3,7 @@ package demo.mydayviewdemo;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import org.jetbrains.annotations.Nullable;
@@ -18,18 +20,19 @@ import org.jetbrains.annotations.Nullable;
  * Created by  Leevin
  * on 2016/7/10 ,18:21.
  */
-public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFactory{
+public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFactory {
 
     private static final String NUM_OF_DAYS = "num_of_days";
     private static final String TIME_MILLIS = "time_millis";
     private static final int VIEW_ID = 1;
-    private  int mNumDays;
+    private int mNumDays;
     protected ViewSwitcher mViewSwitcher;
     protected Animation mInAnimationForward;
     protected Animation mOutAnimationForward;
     protected Animation mInAnimationBackward;
     protected Animation mOutAnimationBackward;
     Time mSelectedDay = new Time();
+    private CalendarController mCalendarController;
 
    /* private Runnable mTZUpdater = new Runnable() {
         @Override
@@ -43,11 +46,11 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
         }
     };*/
 
-    public static MyDayViewFragment newInstance(long timeMillis,int numOfDays) {
+    public static MyDayViewFragment newInstance(long timeMillis, int numOfDays) {
         MyDayViewFragment myDayViewFragment = new MyDayViewFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(NUM_OF_DAYS,numOfDays);
-        bundle.putLong(TIME_MILLIS,timeMillis);
+        bundle.putInt(NUM_OF_DAYS, numOfDays);
+        bundle.putLong(TIME_MILLIS, timeMillis);
         myDayViewFragment.setArguments(bundle);
         return myDayViewFragment;
     }
@@ -81,17 +84,43 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.layout_day_view, null);
+        View v = inflater.inflate(R.layout.layout_day_view, container, false);
         mViewSwitcher = (ViewSwitcher) v.findViewById(R.id.switcher);
         mViewSwitcher.setFactory(this);
         mViewSwitcher.getCurrentView().requestFocus();
+
+        // Set up floating action button
+        FloatingActionButton fab =
+                (FloatingActionButton) getActivity().findViewById(R.id.add);
+        FloatingActionButton togo =
+                (FloatingActionButton) getActivity().findViewById(R.id.togo);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "add", Toast.LENGTH_SHORT).show();
+            }
+        });
+//        fab.setBackgroundResource(R.drawable.add);
+        togo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long now = System.currentTimeMillis();
+                Time time = new Time();
+                time.set(now);
+                goTo(time,false,true);
+                mCalendarController.setTime(time.toMillis(true));
+                Toast.makeText(getActivity(), "togoToday", Toast.LENGTH_SHORT).show();
+            }
+        });
         return v;
     }
 
     @Override
     public View makeView() {
         // TODO: 2016/7/10 init timeZone 
-        MyDayView view = new MyDayView(getActivity(), CalendarController.getInstance(getActivity()),mViewSwitcher, mNumDays);
+        mCalendarController = CalendarController.getInstance(getActivity());
+        MyDayView view = new MyDayView(getActivity(), mCalendarController, mViewSwitcher, mNumDays);
 //        view.setId(VIEW_ID); // TODO: 2016/7/10  
         view.setLayoutParams(new ViewSwitcher.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));

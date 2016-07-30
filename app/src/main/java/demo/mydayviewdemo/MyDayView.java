@@ -70,6 +70,9 @@ public class MyDayView extends View implements ScaleGestureDetector.OnScaleGestu
     private static int DEFAULT_CELL_HEIGHT = 64;
     private static int MAX_CELL_HEIGHT = 150;
     private static int MIN_Y_SPAN = 100;
+    private  int mDefaultDateColor;
+    private  int mTodayDateColor;
+
 
     private boolean mOnFlingCalled;
     private boolean mStartingScroll = false;
@@ -621,6 +624,8 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
         HOURS_LEFT_MARGIN = (int) mResources.getDimension(R.dimen.hours_left_margin);
         HOURS_RIGHT_MARGIN = (int) mResources.getDimension(R.dimen.hours_right_margin);
         MULTI_DAY_HEADER_HEIGHT = (int) mResources.getDimension(R.dimen.day_header_height);
+        MULTI_DAY_HEADER_HEIGHT = (int) (getDateStrHeight(DATE_HEADER_FONT_SIZE) +getDateStrHeight(DAY_HEADER_FONT_SIZE)+0.5 + 6);
+
         int eventTextSizeId;
         if (mNumDays == 1) {
             eventTextSizeId = R.dimen.day_view_event_text_size;
@@ -692,6 +697,9 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
         mExpandAlldayDrawable = mResources.getDrawable(R.drawable.ic_expand_holo_light);
         mCollapseAlldayDrawable = mResources.getDrawable(R.drawable.ic_collapse_holo_light);
         mNewEventHintColor =  mResources.getColor(R.color.new_event_hint_text_color);
+        //// TODO: 2016/7/23
+        mTodayDateColor =  mResources.getColor(R.color.today_date_color);
+        mDefaultDateColor =  mResources.getColor(R.color.default_date_color);
         mAcceptedOrTentativeEventBoxDrawable = mResources
                 .getDrawable(R.drawable.panel_month_event_holo_light);
         mEventGeometry = new EventGeometry();
@@ -788,7 +796,7 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
         String[] dateStrs = {" 28", " 30"};
         mDateStrWidth = computeMaxStringWidth(0, dateStrs, p);
         p.setTextSize(DAY_HEADER_FONT_SIZE);
-        mDateStrWidth += computeMaxStringWidth(0, mDayStrs, p);
+//        mDateStrWidth += computeMaxStringWidth(0, mDayStrs, p);
 
         p.setTextSize(HOURS_TEXT_SIZE);
         p.setTypeface(null);
@@ -3344,21 +3352,40 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
         // Draw day of the month
         String dateNumStr = String.valueOf(dateNum);
         if (mNumDays > 1) {
-            float y = DAY_HEADER_HEIGHT - DAY_HEADER_BOTTOM_MARGIN;
+//            float y = DAY_HEADER_HEIGHT - DAY_HEADER_BOTTOM_MARGIN - 6 -Math.abs(p.ascent());//底部margin
+            // float y = DAY_HEADER_HEIGHT - DAY_HEADER_BOTTOM_MARGIN - 6 ;
 
-            // Draw day of the month
-            x = computeDayLeftPosition(day + 1) - DAY_HEADER_RIGHT_MARGIN;
-            p.setTextAlign(Paint.Align.RIGHT);
+                    // Draw day of the month
+            // x = computeDayLeftPosition(day + 1) - DAY_HEADER_RIGHT_MARGIN;
+            // x = computeDayLeftPosition(day) - DAY_HEADER_RIGHT_MARGIN + mCellWidth/2;
+
+            p.setTextAlign(Paint.Align.LEFT);
             p.setTextSize(DATE_HEADER_FONT_SIZE);
+            String[] dateStr = new String[]{dateNumStr,dayStr};
+            x = computeDayLeftPosition(day) +(mCellWidth + DAY_GAP - computeMaxStringWidth(0,dateStr,p))/2;
 
+            Paint.FontMetricsInt fm = p.getFontMetricsInt();
+            float y = (float) (getDateStrHeight(DATE_HEADER_FONT_SIZE)) - 4;
+            if (todayIndex == day) {
+                int circleY = DAY_HEADER_HEIGHT/2;
+                int circleX = (computeDayLeftPosition(day) +mCellWidth + DAY_GAP)>>1;
+                p.setColor(getResources().getColor(R.color.light_blue));
+                canvas.drawCircle(circleX,circleY,DAY_HEADER_HEIGHT/2,p);
+            }
             p.setTypeface(todayIndex == day ? mBold : Typeface.DEFAULT);
+            p.setColor(todayIndex == day ? mTodayDateColor : mDefaultDateColor);//
+
             canvas.drawText(dateNumStr, x, y, p);
 
             // Draw day of the week
-            x -= p.measureText(" " + dateNumStr);
+            // x -= p.measureText(" " + dateNumStr);
             p.setTextSize(DAY_HEADER_FONT_SIZE);
             p.setTypeface(Typeface.DEFAULT);
+            // dayStr 的y坐标
+            // y += getDateStrHeight(DATE_HEADER_FONT_SIZE) - 20;
+            y = DAY_HEADER_HEIGHT - 2 - DAY_HEADER_BOTTOM_MARGIN;
             canvas.drawText(dayStr, x, y, p);
+
         } else {
             float y = ONE_DAY_HEADER_HEIGHT - DAY_HEADER_ONE_DAY_BOTTOM_MARGIN;
             p.setTextAlign(Paint.Align.LEFT);
@@ -3374,6 +3401,14 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
             p.setTypeface(todayIndex == day ? mBold : Typeface.DEFAULT);
             canvas.drawText(dateNumStr, x, y, p);
         }
+    }
+
+    private float getDateStrHeight(float textSize) {
+        Paint p = new Paint();
+        p.setTextSize(textSize);
+        p.setAntiAlias(true);
+        Paint.FontMetrics fm = p.getFontMetrics();
+        return (float) Math.ceil(fm.descent - fm.ascent);
     }
 
     private void drawScrollLine(Rect r, Canvas canvas, Paint p) {
@@ -3511,6 +3546,14 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
         }
     }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (mHandler == null) {
+            mHandler = getHandler();
+            mHandler.post(mUpdateCurrentTime);
+        }
+    }
 
     public void reloadEvents() {
         // Protect against this being called before this view has been

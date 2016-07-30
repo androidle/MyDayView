@@ -123,4 +123,8 @@
     <color name="appwidget_when">#ffffffff</color>
     <color name="appwidget_where">#ffffffff</color>
     <color name="appwidget_no_events">#ffffffff</color>
+    <color name="today_date_color">#f00</color>
+    <color name="default_date_color">#111</color>
+
+    <color name="light_blue">@android:color/holo_blue_light</color>
 </resources>

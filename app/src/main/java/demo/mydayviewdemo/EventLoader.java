@@ -1,7 +1,6 @@
 package demo.mydayviewdemo;
 
 import android.content.Context;
-import android.text.format.Time;
 
 import java.util.ArrayList;
 
@@ -34,20 +33,20 @@ public class EventLoader {
         event.color = mContext .getResources().getColor(R.color.calendar_date_range_color);;
         mEventsList.add(event);
 
-        Time time = new Time();
-        long currentMillis = System.currentTimeMillis();
-        time.set(currentMillis);
-        int julianDay = Time.getJulianDay(currentMillis, time.gmtoff);
-        Event event1 = new Event();
-        event1.endTime = time.minute + time.hour *60;
-        event1.startTime = event1.endTime - 3*60;
-        event1.startDay = julianDay;
-        event1.endDay = julianDay;
-        event1.startMillis = currentMillis;
-        event1.endMillis = currentMillis + 1000*60*60*3;
-        event1.title = "java";
-        event1.color = mContext.getResources().getColor(R.color.calendar_date_banner_text_color);
-        mEventsList.add(event1);
+//        Time time = new Time();
+//        long currentMillis = System.currentTimeMillis();
+//        time.set(currentMillis);
+//        int julianDay = Time.getJulianDay(currentMillis, time.gmtoff);
+//        Event event1 = new Event();
+//        event1.endTime = time.minute + time.hour *60;
+//        event1.startTime = event1.endTime - 3*60;
+//        event1.startDay = julianDay;
+//        event1.endDay = julianDay;
+//        event1.startMillis = currentMillis;
+//        event1.endMillis = currentMillis + 1000*60*60*3;
+//        event1.title = "java";
+//        event1.color = mContext.getResources().getColor(R.color.calendar_date_banner_text_color);
+//        mEventsList.add(event1);
         return mEventsList;
     }
 }

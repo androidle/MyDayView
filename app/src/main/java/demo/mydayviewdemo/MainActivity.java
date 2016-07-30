@@ -12,5 +12,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         MyDayViewFragment myDayViewFragment = MyDayViewFragment.newInstance(timeMillis, mDayNumbers);
         getFragmentManager().beginTransaction().add(R.id.frame_layout, myDayViewFragment).commit();
+
     }
 }

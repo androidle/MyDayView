@@ -1,13 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="0dip"
-    android:layout_weight="1.0"
-    android:paddingTop="1dip"
-    android:foregroundGravity="fill_horizontal|top">
-    <ViewSwitcher
-        android:id="@+id/switcher"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</FrameLayout>
+    android:layout_height="match_parent"
+  >
+
+        <ViewSwitcher
+            android:id="@+id/switcher"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+   <!--     <demo.mydayviewdemo.CustomFAB
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@android:drawable/ic_input_add"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            custom:bg_color="@color/light_blue"
+            android:tint="@android:color/white"
+            />-->
+
+
+</RelativeLayout>
