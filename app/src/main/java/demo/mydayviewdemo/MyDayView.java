@@ -54,8 +54,8 @@ import java.util.regex.Pattern;
 public class MyDayView extends View implements ScaleGestureDetector.OnScaleGestureListener, View.OnLongClickListener {
 
     private static String TAG = "MyDayView";
-    private static boolean DEBUG = true;
-    private static boolean DEBUG_SCALING = true;
+    private static boolean DEBUG = false;
+    private static boolean DEBUG_SCALING = false;
     private static final String PERIOD_SPACE = ". ";
 
     private static float mScale = 0; // Used for supporting different screen densities
@@ -229,6 +229,32 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
                 }).show().setCanceledOnTouchOutside(true);*/
         Toast.makeText(mContext, "onlongclick", Toast.LENGTH_SHORT).show();
         return true;
+    }
+
+    public void updateTitle() {
+        Time start = new Time(mBaseDate);
+        start.normalize(true);
+        Time end = new Time(start);
+        end.monthDay += mNumDays - 1;
+        // Move it forward one minute so the formatter doesn't lose a day
+        end.minute += 1;
+        end.normalize(true);
+
+        int formatFlags = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR;
+        if (mNumDays != 1) {
+            // Don't show day of the month if for multi-day view
+            formatFlags |= DateUtils.FORMAT_NO_MONTH_DAY;
+
+            // Abbreviate the month if showing multiple months
+            if (start.month != end.month) {
+                formatFlags |= DateUtils.FORMAT_ABBREV_MONTH;
+            }
+            if (start.month < mCurrentTime.month && end.month == mCurrentTime.month) {
+                start = mCurrentTime;
+            }
+        }
+
+        mController.sendEvent(mContext,start, end, formatFlags);
     }
 
     class TodayAnimatorListener extends AnimatorListenerAdapter {
@@ -1513,8 +1539,8 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
         view = (MyDayView) mViewSwitcher.getCurrentView();
         view.setSelected(newSelected, true, false);
         view.requestFocus();
-         view.reloadEvents();
-        // view.updateTitle();
+        view.reloadEvents();
+        view.updateTitle();
         view.restartCurrentTimeUpdates();
         return view;
     }

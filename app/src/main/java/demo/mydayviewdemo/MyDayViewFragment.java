@@ -69,6 +69,8 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
         mOutAnimationForward = AnimationUtils.loadAnimation(context, R.anim.slide_left_out);
         mInAnimationBackward = AnimationUtils.loadAnimation(context, R.anim.slide_right_in);
         mOutAnimationBackward = AnimationUtils.loadAnimation(context, R.anim.slide_right_out);
+
+        mCalendarController = CalendarController.getInstance(getActivity());
     }
 
     private void initArguments() {
@@ -88,7 +90,7 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
         mViewSwitcher = (ViewSwitcher) v.findViewById(R.id.switcher);
         mViewSwitcher.setFactory(this);
         mViewSwitcher.getCurrentView().requestFocus();
-
+        ((MyDayView) mViewSwitcher.getCurrentView()).updateTitle();
         // Set up floating action button
         FloatingActionButton fab =
                 (FloatingActionButton) getActivity().findViewById(R.id.add);
@@ -113,13 +115,13 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
                 Toast.makeText(getActivity(), "togoToday", Toast.LENGTH_SHORT).show();
             }
         });
+
         return v;
     }
 
     @Override
     public View makeView() {
-        // TODO: 2016/7/10 init timeZone 
-        mCalendarController = CalendarController.getInstance(getActivity());
+        // TODO: 2016/7/10 init timeZone
         MyDayView view = new MyDayView(getActivity(), mCalendarController, mViewSwitcher, mNumDays);
 //        view.setId(VIEW_ID); // TODO: 2016/7/10  
         view.setLayoutParams(new ViewSwitcher.LayoutParams(
@@ -222,8 +224,18 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
             next.reloadEvents(); // TODO: 2016/7/10  加载事件
             mViewSwitcher.showNext();
             next.requestFocus();
-//            next.updateTitle(); // TODO: 2016/7/10 no title currently
+            next.updateTitle(); // TODO: 2016/7/10 no title currently
+
             next.restartCurrentTimeUpdates();
         }
     }
+
+    public String getCurrentTitle() {
+        Time time = mSelectedDay;
+        int year = time.year;
+        int month = time.month;
+        return year + "年" + month+1 + "月";
+    }
+
+
 }

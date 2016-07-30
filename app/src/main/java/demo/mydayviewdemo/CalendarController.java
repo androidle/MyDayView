@@ -1,6 +1,7 @@
 package demo.mydayviewdemo;
 
 import android.content.Context;
+import android.text.format.DateUtils;
 import android.text.format.Time;
 
 import java.util.WeakHashMap;
@@ -58,4 +59,13 @@ public class CalendarController {
     }
 
 
+    public void sendEvent(Context mContext, Time start, Time end, int formatFlags) {
+        long startMillis = start.toMillis(true);
+         mTitle = DateUtils.formatDateTime(mContext, startMillis, formatFlags);
+        if (mContext instanceof MainActivity ) {
+          ((MainActivity) mContext).updateTitle(mTitle);
+        }
+    }
+
+    public String mTitle;
 }

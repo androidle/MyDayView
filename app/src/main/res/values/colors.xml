@@ -127,4 +127,5 @@
     <color name="default_date_color">#111</color>
 
     <color name="light_blue">@android:color/holo_blue_light</color>
+    <color name="today_circle_background_color">@android:color/holo_blue_light</color>
 </resources>
