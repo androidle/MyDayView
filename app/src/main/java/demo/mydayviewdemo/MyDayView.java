@@ -67,7 +67,7 @@ public class MyDayView extends View implements ScaleGestureDetector.OnScaleGestu
     // duration of the scroll to go to a specified time
     private static final int GOTO_SCROLL_DURATION = 200;
 
-    private static int DEFAULT_CELL_HEIGHT = 64;
+    private static int DEFAULT_CELL_HEIGHT = 100;
     private static int MAX_CELL_HEIGHT = 150;
     private static int MIN_Y_SPAN = 100;
     private  int mDefaultDateColor;
@@ -3361,20 +3361,20 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
 
             p.setTextAlign(Paint.Align.LEFT);
             p.setTextSize(DATE_HEADER_FONT_SIZE);
-            String[] dateStr = new String[]{dateNumStr,dayStr};
+            String[] dateStr = new String[]{dateNumStr};
             x = computeDayLeftPosition(day) +(mCellWidth + DAY_GAP - computeMaxStringWidth(0,dateStr,p))/2;
 
             Paint.FontMetricsInt fm = p.getFontMetricsInt();
-            float y = (float) (getDateStrHeight(DATE_HEADER_FONT_SIZE)) - 4;
+            float y = (float) (getDateStrHeight(DATE_HEADER_FONT_SIZE)) - 15;//15 只是无意义，只是暂时调整高度
             if (todayIndex == day) {
+                // draw today circle backgroud
                 int circleY = DAY_HEADER_HEIGHT/2;
-                int circleX = (computeDayLeftPosition(day) +mCellWidth + DAY_GAP)>>1;
+                int circleX = computeDayLeftPosition(day) +(mCellWidth + DAY_GAP)/2;
                 p.setColor(getResources().getColor(R.color.light_blue));
                 canvas.drawCircle(circleX,circleY,DAY_HEADER_HEIGHT/2,p);
             }
             p.setTypeface(todayIndex == day ? mBold : Typeface.DEFAULT);
             p.setColor(todayIndex == day ? mTodayDateColor : mDefaultDateColor);//
-
             canvas.drawText(dateNumStr, x, y, p);
 
             // Draw day of the week
@@ -3383,7 +3383,7 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
             p.setTypeface(Typeface.DEFAULT);
             // dayStr 的y坐标
             // y += getDateStrHeight(DATE_HEADER_FONT_SIZE) - 20;
-            y = DAY_HEADER_HEIGHT - 2 - DAY_HEADER_BOTTOM_MARGIN;
+            y = DAY_HEADER_HEIGHT - 10 - DAY_HEADER_BOTTOM_MARGIN;// 10 只是无意义，只是暂时调整高度
             canvas.drawText(dayStr, x, y, p);
 
         } else {
