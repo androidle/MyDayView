@@ -93,7 +93,7 @@ public class MyDayView extends View implements ScaleGestureDetector.OnScaleGestu
     private ContinueScroll mContinueScroll = new ContinueScroll();
 
     Time mBaseDate;
-    private Time mCurrentTime;
+    public Time mCurrentTime;
     //Update the current time line every five minutes if the window is left open that long
     private static final int UPDATE_CURRENT_TIME_DELAY = 300000;
     private UpdateCurrentTime mUpdateCurrentTime = new UpdateCurrentTime();

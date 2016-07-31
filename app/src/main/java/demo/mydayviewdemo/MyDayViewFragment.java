@@ -143,10 +143,12 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        long currentTimeMillis = System.currentTimeMillis();
-        Time currentTime = new Time();
-        currentTime.set(currentTimeMillis);
-        String today = "" + currentTime.monthDay ;
+//        long currentTimeMillis = System.currentTimeMillis();
+//        Time currentTime = new Time();
+//        currentTime.set(currentTimeMillis);
+//        String today = "" + currentTime.monthDay ;
+        MyDayView currentView = (MyDayView) mViewSwitcher.getCurrentView();
+        String today = "" + currentView.mCurrentTime.monthDay;
         menu.findItem(R.id.menu_today).setTitle(today);
         super.onPrepareOptionsMenu(menu);
     }
@@ -155,7 +157,6 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
     public View makeView() {
         // TODO: 2016/7/10 init timeZone
         MyDayView view = new MyDayView(getActivity(), mCalendarController, mViewSwitcher, mNumDays);
-//        view.setId(VIEW_ID); // TODO: 2016/7/10  
         view.setLayoutParams(new ViewSwitcher.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
         view.setSelected(mSelectedDay, false, false);
@@ -256,7 +257,7 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
             next.reloadEvents();
             mViewSwitcher.showNext();
             next.requestFocus();
-            next.updateTitle(); // TODO: 2016/7/10 no title currently
+            next.updateTitle();
             next.restartCurrentTimeUpdates();
         }
     }
