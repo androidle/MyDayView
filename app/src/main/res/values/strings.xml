@@ -4,6 +4,9 @@
     <string name="day_view_new_event_hint">+ New event</string>
     <string name="new_event_dialog_option">New event</string>
     <string name="new_event_dialog_label">New event</string>
+    <string name="menu_today">today</string>
+    <string name="refresh">refresh</string>
+    <string name="menu_clear">clear</string>
     <!-- Shown in month view next to event icon when additional events exist for that day, but no
     room remaining -->
     <plurals name="month_more_events">

@@ -249,6 +249,7 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
             if (start.month != end.month) {
                 formatFlags |= DateUtils.FORMAT_ABBREV_MONTH;
             }
+            // 若本周含今天 以今天的月份显示
             if (start.month < mCurrentTime.month && end.month == mCurrentTime.month) {
                 start = mCurrentTime;
             }

@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.text.format.Time;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -33,6 +36,7 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
     protected Animation mOutAnimationBackward;
     Time mSelectedDay = new Time();
     private CalendarController mCalendarController;
+    private Menu mMenu;
 
    /* private Runnable mTZUpdater = new Runnable() {
         @Override
@@ -45,6 +49,37 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
             mSelectedDay.normalize(true);
         }
     };*/
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.day_view_fragment_menu,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_clear:
+                Toast.makeText(getActivity(), "clear all", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu_today:
+                goToToday();
+                break;
+            case R.id.menu_refresh:
+                Toast.makeText(getActivity(), "refresh", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        return true;
+    }
+
+    private void goToToday() {
+        long now = System.currentTimeMillis();
+        Time time = new Time();
+        time.set(now);
+        goTo(time,false,true);
+        mCalendarController.setTime(time.toMillis(true));
+        Toast.makeText(getActivity(), "togoToday", Toast.LENGTH_SHORT).show();
+    }
 
     public static MyDayViewFragment newInstance(long timeMillis, int numOfDays) {
         MyDayViewFragment myDayViewFragment = new MyDayViewFragment();
@@ -94,8 +129,6 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
         // Set up floating action button
         FloatingActionButton fab =
                 (FloatingActionButton) getActivity().findViewById(R.id.add);
-        FloatingActionButton togo =
-                (FloatingActionButton) getActivity().findViewById(R.id.togo);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,20 +136,19 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
                 Toast.makeText(getActivity(), "add", Toast.LENGTH_SHORT).show();
             }
         });
-//        fab.setBackgroundResource(R.drawable.add);
-        togo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                long now = System.currentTimeMillis();
-                Time time = new Time();
-                time.set(now);
-                goTo(time,false,true);
-                mCalendarController.setTime(time.toMillis(true));
-                Toast.makeText(getActivity(), "togoToday", Toast.LENGTH_SHORT).show();
-            }
-        });
 
+        setHasOptionsMenu(true);
         return v;
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        long currentTimeMillis = System.currentTimeMillis();
+        Time currentTime = new Time();
+        currentTime.set(currentTimeMillis);
+        String today = "" + currentTime.monthDay ;
+        menu.findItem(R.id.menu_today).setTitle(today);
+        super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -221,11 +253,10 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
             }
 
             next.setSelected(goToTime, ignoreTime, animateToday);
-            next.reloadEvents(); // TODO: 2016/7/10  加载事件
+            next.reloadEvents();
             mViewSwitcher.showNext();
             next.requestFocus();
             next.updateTitle(); // TODO: 2016/7/10 no title currently
-
             next.restartCurrentTimeUpdates();
         }
     }
@@ -236,6 +267,7 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
         int month = time.month;
         return year + "年" + month+1 + "月";
     }
+
 
 
 }

@@ -3,6 +3,7 @@ package demo.mydayviewdemo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 
 public class MainActivity extends AppCompatActivity {
     private int mDayNumbers = 7;
@@ -18,12 +19,19 @@ public class MainActivity extends AppCompatActivity {
 
 
         ab = getSupportActionBar();
-//        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
-//        ab.setDisplayHomeAsUpEnabled(true);
+        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+        ab.setDisplayHomeAsUpEnabled(true);
 //        ab.setTitle(myDayViewFragment.getCurrentTitle());
     }
 
     public void updateTitle(String title) {
             ab.setTitle(title);
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
 }
