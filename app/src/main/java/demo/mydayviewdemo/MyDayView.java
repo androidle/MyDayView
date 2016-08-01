@@ -652,7 +652,6 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
         HOURS_RIGHT_MARGIN = (int) mResources.getDimension(R.dimen.hours_right_margin);
         MULTI_DAY_HEADER_HEIGHT = (int) mResources.getDimension(R.dimen.day_header_height);
         MULTI_DAY_HEADER_HEIGHT = (int) (getDateStrHeight(DATE_HEADER_FONT_SIZE) +getDateStrHeight(DAY_HEADER_FONT_SIZE)+0.5 + 6);
-
         int eventTextSizeId;
         if (mNumDays == 1) {
             eventTextSizeId = R.dimen.day_view_event_text_size;
@@ -671,6 +670,9 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
         EVENT_TEXT_RIGHT_MARGIN = EVENT_TEXT_LEFT_MARGIN;
         EVENT_ALL_DAY_TEXT_LEFT_MARGIN = EVENT_TEXT_LEFT_MARGIN;
         EVENT_ALL_DAY_TEXT_RIGHT_MARGIN = EVENT_TEXT_LEFT_MARGIN;
+
+        HOURS_MARGIN = HOURS_LEFT_MARGIN + HOURS_RIGHT_MARGIN;
+        DAY_HEADER_HEIGHT = mNumDays == 1 ? ONE_DAY_HEADER_HEIGHT : MULTI_DAY_HEADER_HEIGHT;
         // to support different screen
         if (mScale == 0) {
             mScale = mResources.getDisplayMetrics().density;
@@ -714,9 +716,6 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
                 NEW_EVENT_MAX_LENGTH *= mScale;
             }
         }
-
-        HOURS_MARGIN = HOURS_LEFT_MARGIN + HOURS_RIGHT_MARGIN;
-        DAY_HEADER_HEIGHT = mNumDays == 1 ? ONE_DAY_HEADER_HEIGHT : MULTI_DAY_HEADER_HEIGHT;
         mCurrentTimeLine = mResources.getDrawable(R.drawable.timeline_indicator_holo_light);
         mCurrentTimeAnimateLine = mResources
                 .getDrawable(R.drawable.timeline_indicator_activated_holo_light);
@@ -871,6 +870,9 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
         mSelectionMode = SELECTION_HIDDEN;
     }
 
+    private int computeTextWidth(String text, Paint paint) {
+        return (int) (paint.measureText(text) + 0.5);
+    }
     private int computeMaxStringWidth(int currentMax, String[] strings, Paint p) {
         float maxWidthF = 0.0f;
 
@@ -3362,6 +3364,8 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
             }
 
             p.setColor(color);
+//            String lunarDate = getLunarDate(cell);
+//            drawDayHeader(lunarDate, day, cell, canvas, p);
             drawDayHeader(dayNames[dayOfWeek], day, cell, canvas, p);
         }
         p.setTypeface(null);
@@ -3379,20 +3383,10 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
         // Draw day of the month
         String dateNumStr = String.valueOf(dateNum);
         if (mNumDays > 1) {
-//            float y = DAY_HEADER_HEIGHT - DAY_HEADER_BOTTOM_MARGIN - 6 -Math.abs(p.ascent());//底部margin
-            // float y = DAY_HEADER_HEIGHT - DAY_HEADER_BOTTOM_MARGIN - 6 ;
-
-                    // Draw day of the month
-            // x = computeDayLeftPosition(day + 1) - DAY_HEADER_RIGHT_MARGIN;
-            // x = computeDayLeftPosition(day) - DAY_HEADER_RIGHT_MARGIN + mCellWidth/2;
-
             p.setTextAlign(Paint.Align.LEFT);
             p.setTextSize(DATE_HEADER_FONT_SIZE);
-            String[] dateStr = new String[]{dateNumStr};
-            x = computeDayLeftPosition(day) +(mCellWidth + DAY_GAP - computeMaxStringWidth(0,dateStr,p))/2;
-
-            Paint.FontMetricsInt fm = p.getFontMetricsInt();
-            float y = (float) (getDateStrHeight(DATE_HEADER_FONT_SIZE)) - 15;//15 只是无意义，只是暂时调整高度
+            x = computeDayLeftPosition(day) +(mCellWidth + DAY_GAP - computeTextWidth(dateNumStr,p))/2;
+            float y = (float) (getDateStrHeight(DATE_HEADER_FONT_SIZE)) - 4 ;
             if (todayIndex == day) {
                 // draw today circle backgroud
                 int circleY = DAY_HEADER_HEIGHT/2;
@@ -3405,12 +3399,11 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
             canvas.drawText(dateNumStr, x, y, p);
 
             // Draw day of the week
-            // x -= p.measureText(" " + dateNumStr);
             p.setTextSize(DAY_HEADER_FONT_SIZE);
             p.setTypeface(Typeface.DEFAULT);
+            x = computeDayLeftPosition(day) +(mCellWidth + DAY_GAP - computeTextWidth(dayStr,p))/2;
             // dayStr 的y坐标
-            // y += getDateStrHeight(DATE_HEADER_FONT_SIZE) - 20;
-            y = DAY_HEADER_HEIGHT - 10 - DAY_HEADER_BOTTOM_MARGIN;// 10 只是无意义，只是暂时调整高度
+            y = DAY_HEADER_HEIGHT  - DAY_HEADER_BOTTOM_MARGIN - 4;// 10 只是无意义，只是暂时调整高度
             canvas.drawText(dayStr, x, y, p);
 
         } else {

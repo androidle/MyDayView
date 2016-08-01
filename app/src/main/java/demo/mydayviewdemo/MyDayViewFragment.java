@@ -143,10 +143,6 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-//        long currentTimeMillis = System.currentTimeMillis();
-//        Time currentTime = new Time();
-//        currentTime.set(currentTimeMillis);
-//        String today = "" + currentTime.monthDay ;
         MyDayView currentView = (MyDayView) mViewSwitcher.getCurrentView();
         String today = "" + currentView.mCurrentTime.monthDay;
         menu.findItem(R.id.menu_today).setTitle(today);
