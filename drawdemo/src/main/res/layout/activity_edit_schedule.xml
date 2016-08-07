@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".TestActivity">
+
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:scrollbars="vertical">
+        <!--事件名称 -->
+        <LinearLayout
+            android:id="@+id/more_options_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical"
+            >
+
+            <EditText
+                android:id="@+id/tv_schedule_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:background="#fff"
+                android:backgroundTint="#fff"
+                android:gravity="center|left"
+                android:hint="add schedule type"
+                android:padding="10dp"
+                android:textSize="16sp"/>
+
+            <!--事件类型 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="7dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:onClick="delete"
+                    android:id="@+id/tv_schedule_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:background="#fff"
+                    android:backgroundTint="#fff"
+                    android:gravity="center|left"
+                    android:hint="add"
+                    android:padding="10dp"
+                    android:textSize="16sp"/>
+            </LinearLayout>
+
+     <!--       &lt;!&ndash;选择时间与地点&ndash;&gt;
+            <include
+                layout="@layout/item_schedule"/>
+-->
+            <TextView
+                android:onClick="add"
+                android:id="@+id/tv_more_options"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="#fff"
+                android:clickable="true"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="more options"
+                android:textSize="16sp"/>
+
+            <View
+                android:background="#000"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

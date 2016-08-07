@@ -1229,6 +1229,9 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
         }
     }
 
+    // Encapsulates the code to continue the scrolling after the
+    // finger is lifted. Instead of stopping the scroll immediately,
+    // the scroll continues to "free spin" and gradually slows down.
     private class ContinueScroll implements Runnable {
         public void run() {
             mScrolling = mScrolling && mScroller.computeScrollOffset();
@@ -1417,8 +1420,10 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
         mTouchMode = TOUCH_MODE_DOWN;
         mViewStartX = 0;
         mOnFlingCalled = false;
-//        mHandler.removeCallbacks(mContinueScroll);
+        mHandler.removeCallbacks(mContinueScroll);
     }
+
+
 
     private void doFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         cancelAnimation();
@@ -1803,7 +1808,7 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
                 selectedTime.setJulianDay(mSelectionDay);
                 selectedTime.hour = mSelectionHour;
                 selectedTime.normalize(true /* ignore isDst */);
-                // TODO: 2016/7/11  controller分发处理
+                // TODO: 2016/7/11  controller分发处理 dayHeader
                 Toast.makeText(mContext, "EventType.GO_TO,=====validPosition===DAY_HEADER====", Toast.LENGTH_SHORT).show();
             }
             return;
@@ -1856,6 +1861,7 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
             // TODO: 2016/7/11 controller
             Toast.makeText(mContext, "EventType.GO_TO,==Time==========", Toast.LENGTH_SHORT).show();
         }
+
         invalidate();
     }
 

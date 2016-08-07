@@ -1,1 +1,1 @@
-include ':app', ':drawdemo'
+include ':app', ':android5.0',':drawdemo'

@@ -9,17 +9,39 @@
 
     <com.thinkcoo.www.drawdemo.ViewDemo
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-
  />
 
     <Button
         android:id="@+id/btn"
+        android:onClick="add"
         android:text="text hover event"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <Button
+        android:id="@+id/open"
+        android:text="to text value animator"
+        android:onClick="open"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/container"
+        android:layout_weight="0"
+        android:text="text hover event"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:text="helloworld"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+    </LinearLayout>
 
 
 </LinearLayout>

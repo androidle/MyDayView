@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MyDayViewDemo.iml" filepath="$PROJECT_DIR$/MyDayViewDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/MyDayViewDemo-master.iml" filepath="$PROJECT_DIR$/MyDayViewDemo-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android5.0/android5.0.iml" filepath="$PROJECT_DIR$/android5.0/android5.0.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/drawdemo/drawdemo.iml" filepath="$PROJECT_DIR$/drawdemo/drawdemo.iml" />
     </modules>
