@@ -68,4 +68,18 @@ public class CalendarController {
     }
 
     public String mTitle;
+
+    public void sendEvent(Context context, Time selectedTime) {
+        mHandler.handleEvent(selectedTime);
+    }
+
+    public interface EventHandler {
+        void handleEvent(Time time);
+    }
+
+    private EventHandler mHandler;
+
+    public void setHandler(EventHandler handler) {
+        mHandler = handler;
+    }
 }

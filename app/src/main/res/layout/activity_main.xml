@@ -13,6 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Hello World!" />
+    <FrameLayout
+        android:id="@+id/frame_layout_2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:text="Hello World!" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add"

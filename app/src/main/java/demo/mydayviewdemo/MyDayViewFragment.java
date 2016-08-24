@@ -37,6 +37,7 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
     Time mSelectedDay = new Time();
     private CalendarController mCalendarController;
     private Menu mMenu;
+    private FloatingActionButton mFab;
 
    /* private Runnable mTZUpdater = new Runnable() {
         @Override
@@ -127,10 +128,9 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
         mViewSwitcher.getCurrentView().requestFocus();
         ((MyDayView) mViewSwitcher.getCurrentView()).updateTitle();
         // Set up floating action button
-        FloatingActionButton fab =
-                (FloatingActionButton) getActivity().findViewById(R.id.add);
+        mFab = (FloatingActionButton) getActivity().findViewById(R.id.add);
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "add", Toast.LENGTH_SHORT).show();
@@ -139,6 +139,12 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
 
         setHasOptionsMenu(true);
         return v;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
     }
 
     @Override
@@ -153,6 +159,33 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
     public View makeView() {
         // TODO: 2016/7/10 init timeZone
         MyDayView view = new MyDayView(getActivity(), mCalendarController, mViewSwitcher, mNumDays);
+        view.setOnMyScrollListener(new MyDayView.OnMyScrollListener() {
+            @Override
+            public void onScroll(float v, float y) {
+                if (v > 0 ) {
+                    if (y > 0 && mFab.getVisibility() == View.VISIBLE) {
+                        mFab.hide();
+                    } else {
+                        mFab.show();
+                    }
+                } else if(v < 0 ) {
+                    if (y > 0 && mFab.getVisibility() == View.VISIBLE) {
+                        mFab.hide();
+                    } else {
+                        mFab.show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFling(float y) {
+                if (y > 0 && mFab.getVisibility() == View.VISIBLE) {
+                    mFab.hide();
+                } else if(y < 0 && mFab.getVisibility() !=View.VISIBLE) {
+                    mFab.show();
+                }
+            }
+        });
         view.setLayoutParams(new ViewSwitcher.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
         view.setSelected(mSelectedDay, false, false);

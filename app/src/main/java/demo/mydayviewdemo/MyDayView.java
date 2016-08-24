@@ -1363,6 +1363,24 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
                 // don't scroll vertically if this started in the allday area
                 distanceY = 0;
             }
+
+            if (mOnMyScrollListener != null && Math.abs(distanceY) > 0) {
+                mOnMyScrollListener.onScroll(e1.getY()-e2.getY(),distanceY);
+            }
+            if (e1.getY()-e2.getY() > 0 ) {
+                // Fling left
+                if (distanceY > 0) {
+                    Log.e(TAG, "onScroll: =====distanceY======+up" + distanceY);
+                } else {
+                    Log.e(TAG, "onScroll: =====distanceY======+down" + distanceY);
+                }
+            } else if (e2.getY()-e1.getY() > 0 ) {
+                if (distanceY > 0) {
+                    Log.e(TAG, "onScroll: =====distanceY======+up" + distanceY);
+                } else {
+                    Log.e(TAG, "onScroll: =====distanceY======+down" + distanceY);
+                }
+            }
             MyDayView.this.doScroll(e1, e2, distanceX, distanceY);
             return true;
         }
@@ -1390,6 +1408,14 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
         }
     }
 
+    public interface OnMyScrollListener {
+        void onScroll(float v, float y);
+        void onFling(float y);
+    }
+    OnMyScrollListener mOnMyScrollListener;
+    public void setOnMyScrollListener(OnMyScrollListener onMyScrollListener) {
+        this.mOnMyScrollListener = onMyScrollListener;
+    }
     private void doLongPress(MotionEvent ev) {
         if (mScrolling) {
             return;
@@ -1420,6 +1446,7 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
         mTouchMode = TOUCH_MODE_DOWN;
         mViewStartX = 0;
         mOnFlingCalled = false;
+        mScrolling = false;
         mHandler.removeCallbacks(mContinueScroll);
     }
 
@@ -1796,7 +1823,7 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
             if((x < mHoursWidth && y > DAY_HEADER_HEIGHT && y < DAY_HEADER_HEIGHT + mAlldayHeight)
                     || (!mShowAllAllDayEvents && mAnimateDayHeight == 0 && y < bottom &&
                     y >= bottom - MIN_UNEXPANDED_ALLDAY_EVENT_HEIGHT)) {
-//                doExpandAllDayClick(); // TODO: 2016/7/11 展开全天事件的onclick
+                //doExpandAllDayClick(); // TODO: 2016/7/11 展开全天事件的onclick
                 return;
             }
         }
@@ -1809,6 +1836,7 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
                 selectedTime.hour = mSelectionHour;
                 selectedTime.normalize(true /* ignore isDst */);
                 // TODO: 2016/7/11  controller分发处理 dayHeader
+                mController.sendEvent(mContext, selectedTime);
                 Toast.makeText(mContext, "EventType.GO_TO,=====validPosition===DAY_HEADER====", Toast.LENGTH_SHORT).show();
             }
             return;
@@ -3368,7 +3396,6 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
                     color = mWeek_sundayColor;
                 }
             }
-
             p.setColor(color);
 //            String lunarDate = getLunarDate(cell);
 //            drawDayHeader(lunarDate, day, cell, canvas, p);
@@ -3496,7 +3523,6 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
                     Log.e(TAG, "ACTION_DOWN ev.getDownTime = " + ev.getDownTime() + " Cnt="
                             + ev.getPointerCount());
                 }
-
                 int bottom = mAlldayHeight + DAY_HEADER_HEIGHT + ALLDAY_TOP_MARGIN;
                 if (ev.getY() < bottom) {
                     mTouchStartedInAlldayArea = true;
