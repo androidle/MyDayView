@@ -1363,9 +1363,8 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
                 // don't scroll vertically if this started in the allday area
                 distanceY = 0;
             }
-
             if (mOnMyScrollListener != null && Math.abs(distanceY) > 0) {
-                mOnMyScrollListener.onScroll(e1.getY()-e2.getY(),distanceY);
+                mOnMyScrollListener.onScroll(distanceY);
             }
             if (e1.getY()-e2.getY() > 0 ) {
                 // Fling left
@@ -1409,7 +1408,7 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
     }
 
     public interface OnMyScrollListener {
-        void onScroll(float v, float y);
+        void onScroll(float y);
         void onFling(float y);
     }
     OnMyScrollListener mOnMyScrollListener;

@@ -161,20 +161,12 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
         MyDayView view = new MyDayView(getActivity(), mCalendarController, mViewSwitcher, mNumDays);
         view.setOnMyScrollListener(new MyDayView.OnMyScrollListener() {
             @Override
-            public void onScroll(float v, float y) {
-                if (v > 0 ) {
-                    if (y > 0 && mFab.getVisibility() == View.VISIBLE) {
+            public void onScroll(float y) {
+                if (y > 0 && mFab.getVisibility() == View.VISIBLE) {
                         mFab.hide();
                     } else {
                         mFab.show();
                     }
-                } else if(v < 0 ) {
-                    if (y > 0 && mFab.getVisibility() == View.VISIBLE) {
-                        mFab.hide();
-                    } else {
-                        mFab.show();
-                    }
-                }
             }
 
             @Override
