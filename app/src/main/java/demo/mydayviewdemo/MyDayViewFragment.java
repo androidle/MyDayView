@@ -162,6 +162,7 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
         view.setOnMyScrollListener(new MyDayView.OnMyScrollListener() {
             @Override
             public void onScroll(float y) {
+                System.out.println("==========onScroll====consume=============="+y);
                 if (y > 0 && mFab.getVisibility() == View.VISIBLE) {
                         mFab.hide();
                     } else {
@@ -171,11 +172,11 @@ public class MyDayViewFragment extends Fragment implements ViewSwitcher.ViewFact
 
             @Override
             public void onFling(float y) {
-                if (y > 0 && mFab.getVisibility() == View.VISIBLE) {
-                    mFab.hide();
-                } else if(y < 0 && mFab.getVisibility() !=View.VISIBLE) {
-                    mFab.show();
-                }
+//                if (y > 0 && mFab.getVisibility() == View.VISIBLE) {
+//                    mFab.hide();
+//                } else if(y < 0 && mFab.getVisibility() !=View.VISIBLE) {
+//                    mFab.show();
+//                }
             }
         });
         view.setLayoutParams(new ViewSwitcher.LayoutParams(

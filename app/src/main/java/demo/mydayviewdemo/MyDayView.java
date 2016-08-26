@@ -1338,7 +1338,7 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
             out.scaleCurrentDuration(0);
         }
     }
-
+    private float lastDistanceY ;
     class CalendarGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onSingleTapUp(MotionEvent ev) {
@@ -1363,23 +1363,11 @@ private TodayAnimatorListener mTodayAnimatorListener = new TodayAnimatorListener
                 // don't scroll vertically if this started in the allday area
                 distanceY = 0;
             }
-            if (mOnMyScrollListener != null && Math.abs(distanceY) > 0) {
+            float consumeY = lastDistanceY * distanceY;
+            if (mOnMyScrollListener != null && consumeY < 0) {
                 mOnMyScrollListener.onScroll(distanceY);
             }
-            if (e1.getY()-e2.getY() > 0 ) {
-                // Fling left
-                if (distanceY > 0) {
-                    Log.e(TAG, "onScroll: =====distanceY======+up" + distanceY);
-                } else {
-                    Log.e(TAG, "onScroll: =====distanceY======+down" + distanceY);
-                }
-            } else if (e2.getY()-e1.getY() > 0 ) {
-                if (distanceY > 0) {
-                    Log.e(TAG, "onScroll: =====distanceY======+up" + distanceY);
-                } else {
-                    Log.e(TAG, "onScroll: =====distanceY======+down" + distanceY);
-                }
-            }
+            lastDistanceY = distanceY;
             MyDayView.this.doScroll(e1, e2, distanceX, distanceY);
             return true;
         }
